@@ -1,9 +1,13 @@
 from datetime import datetime, timedelta
 from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.generics import ListCreateAPIView, RetrieveDestroyAPIView, ListAPIView
-from .models import Chat, Message
-from .serializers import ChatSerializer, MessageSerializer
+from rest_framework.generics import ListCreateAPIView, CreateAPIView
+from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser
+from .models import Chat, Message, UploadedFile
+from .serializers import ChatSerializer, MessageSerializer, UploadedFileSerializer
+from .ai_vector_dbs import AIVectorDB
 
 class ChatViewSet(ModelViewSet):
     queryset = Chat.objects.all()
@@ -63,18 +67,24 @@ class MessageListCreateView(ListCreateAPIView):
     
     def get_queryset(self):
         return super().get_queryset().filter(user = self.request.user, chat_id = self.kwargs['chat_id'])
-        
     
-class MessageRetrieveDestroyView(RetrieveDestroyAPIView):
-    queryset = Message.objects.all()
-    serializer_class = MessageSerializer
-    
-    def get_queryset(self):
-        return super().get_queryset().filter(user = self.request.user)
-    
-    def perform_destroy(self, instance):
-        # Ensure the message belongs to the user before deleting
-        if instance.user == self.request.user:
-            instance.delete()
-        else:
-            return Response(status=403)
+
+class FileUploadView(CreateAPIView):
+
+    parser_classes = (MultiPartParser, FormParser)
+    serializer_class = UploadedFileSerializer
+    queryset = UploadedFile.objects.all()
+
+    def post(self, request, chat_id, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        obj = serializer.save()
+        path = obj.file.path
+        chat = Chat.objects.get(id=chat_id)
+        ai_vector_db = AIVectorDB()
+        vector_db_path = ai_vector_db.save_vector_db(path, str(request.user.id), chat_id)   
+        obj.vector_db_path = vector_db_path
+        obj.save()
+        chat.attach = obj
+        chat.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
