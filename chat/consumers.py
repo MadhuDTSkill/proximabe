@@ -1,13 +1,13 @@
 from typing import Generator
-import django.conf.urls.static
 from base_app.consumers import BaseChatAsyncJsonWebsocketConsumer
 from base_app.decorators import consumer_method_exception_handler
 from .ai_chats import LLMResponse
+from .ai_memory import Memory
 from channels.db import database_sync_to_async
 from users.models import User
+from langchain_core.chat_history import BaseChatMessageHistory
 
 
-sample = """A black hole is a region of spacetime where gravity is so strong that nothing, not even light and other electromagnetic waves, is capable of possessing enough energy to escape it.[2] Einstein's theory of general relativity predicts that a sufficiently compact mass can deform spacetime to form a black hole.[3][4] The boundary of no escape is called the event horizon. A black hole has a great effect on the fate and circumstances of an object crossing it, but it has no locally detectable features according to general relativity.[5] In many ways, a black hole acts like an ideal black body, as it reflects no light.[6][7] Quantum field theory in curved spacetime predicts that event horizons emit Hawking radiation, with the same spectrum as a black body of a temperature inversely proportional to its mass. This temperature is of the order of billionths of a kelvin for stellar black holes, making it essentially impossible to observe directly."""
 
 class ChatConsumer(BaseChatAsyncJsonWebsocketConsumer):
     groups = []
@@ -15,7 +15,7 @@ class ChatConsumer(BaseChatAsyncJsonWebsocketConsumer):
     async def connect(self):
         if await self.user_connect() and await self.chat_connect():
             config = await self.get_user_settings_config()
-            self.llm_response = LLMResponse(config, self.user.id, self.chat.id)
+            self.llm_response = LLMResponse(config, str(self.user.id), str(self.chat.id))
 
     @database_sync_to_async
     def get_user_settings_config(self):
@@ -34,6 +34,14 @@ class ChatConsumer(BaseChatAsyncJsonWebsocketConsumer):
         self.prompt = content.get('prompt') or ''
         await self.get_llm_response()
 
+
+    async def get_session_history(self, session_id:str = 'default') -> BaseChatMessageHistory:
+        return Memory.get_memory(session_id, str(self.user.id), 2000, self.llm_response.llm, True, False, 'human')
+    
+    async def add_response_to_session_history(self, response):
+        memory = await self.get_session_history(str(self.chat.id))
+        memory.add_ai_message(response)
+        
     
     async def get_llm_response(self):
         generator : Generator = self.llm_response.get_response(self.prompt)
@@ -57,6 +65,8 @@ class ChatConsumer(BaseChatAsyncJsonWebsocketConsumer):
                 "user_name" : str(self.user.name),
             })
             full_response  += response
+
+        await self.add_response_to_session_history(full_response)
 
         await self.send_json({
                 'prompt' : self.prompt,

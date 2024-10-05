@@ -9,7 +9,7 @@ from langchain_community.chat_message_histories import SQLChatMessageHistory
 
 apikey = os.getenv('GROQ_API_KEY')
 system_prompt = """
-    Your name is Proxima, and you are designed to assist users by generating responses based on interactions with local, open-source LLM models from providers like Groq, Meta, and Google. You are currently using the model: **{current_model}**.
+    Your name is Proxima, developed by **Madhu** a Application Developer, and you are designed to assist users by generating responses based on interactions with local, open-source LLM models from providers like Groq, Meta, and Google. You are currently using the model: **{current_model}**.
 
     You will respond to user queries by following these guidelines:
 
@@ -42,29 +42,23 @@ class LLMResponse:
         self.chain = self.qa_prompt | self.llm | StrOutputParser()
         self.conversational_rag_chain = RunnableWithMessageHistory(
             self.chain,
-            self.get_session_history,
+            get_session_history=self.get_session_history,
             input_messages_key="input",
             history_messages_key="chat_history",
         )
 
-    def get_session_history(self, id:str = 'default') -> BaseChatMessageHistory:
-        message_history = SQLChatMessageHistory(session_id=self.chat_id, connection_string=os.getenv('MEMORY_DATABASE_URL'), table_name = self.user_id)
-        message_history_trimmed = Memory(message_history, 2000, self.llm, True, False, 'human') if len(message_history.messages) > 0 else message_history
-        return message_history_trimmed
-
+    def get_session_history(self, session_id:str = 'default') -> BaseChatMessageHistory:
+        return Memory.get_memory(session_id, self.user_id, 2000, self.llm, True, False, 'human')
+        
     def get_response(self, prompt: str):
         input = {'input' : prompt, "current_model": self.config.get('model')}
-        return self.chain.stream(
+        memory = self.get_session_history(str(self.chat_id))
+        memory.add_user_message(prompt)
+        return self.conversational_rag_chain.stream(
             input,
             config={
             "configurable": {
                 "session_id": self.chat_id,
-                # "user_id" : self.user_id,
-                # "max_tokens" : 2000,
-                # "token_counter" : self.llm,
-                # "include_system" : True,
-                # "allow_partial" : False,
-                # "start_on" : "human"
             }
         })
         

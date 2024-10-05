@@ -33,7 +33,6 @@ class Memory:
         
     @classmethod
     def get_memory(cls, session_id:str, user_id:str, max_tokens: int, token_counter, include_system: bool, allow_partial: bool, start_on: str) -> BaseChatMessageHistory:
-        print('sfdasdfsdsadfas dfsdf sd fsd fsdfsf',session_id, user_id, max_tokens, token_counter, include_system, allow_partial, start_on)
         message_history = SQLChatMessageHistory(session_id=session_id, connection_string=os.getenv('MEMORY_DATABASE_URL'), table_name = user_id)
         message_history_trimmed = cls(message_history, max_tokens, token_counter, include_system, allow_partial, start_on) if len(message_history.messages) > 0 else message_history
         return message_history_trimmed
