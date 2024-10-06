@@ -1,10 +1,10 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, views
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework_simplejwt.exceptions import TokenError
 from django.contrib.auth import get_user_model
-from .serializers import UserRegisterSerializer, UserLoginSerializer, UserLogoutSerializer
-from .models import TokenBlockList, User
+from .serializers import UserRegisterSerializer, UserLoginSerializer, UserLogoutSerializer, UserConfigSerializer
+from .models import TokenBlockList, User, UserSettings
 
 class UserRegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -38,8 +38,8 @@ class UserLoginView(generics.GenericAPIView):
 
         return Response({'detail': 'Invalid credentials'}, status=400)
 
+
 class UserLogoutView(generics.GenericAPIView):
-    permission_classes = [permissions.IsAuthenticated]
     serializer_class = UserLogoutSerializer
 
     def post(self, request):
@@ -58,13 +58,37 @@ class UserLogoutView(generics.GenericAPIView):
         except Exception:
             return Response({'detail': 'Error occurred while logging out'}, status=500)
 
+
 class UserDetailsView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserRegisterSerializer
-    permission_classes = [permissions.IsAuthenticated]
     
     def get(self, request):
         user = self.queryset.get(id=request.user)
         user_data = self.serializer_class(user).data
         return Response(user_data)
+
+class UserConfigView(views.APIView):
+    serializer_class = UserConfigSerializer
+    queryset = UserSettings.objects.all()
     
+    def post(self, request):
+        user = request.user
+        config = request.data.get('config', {})
+        user_settings, created = UserSettings.objects.get_or_create(user=user)
+        user_settings.config = {
+            **user_settings.config,
+            **config,
+        }
+        user_settings.save()
+        serializer = self.serializer_class(user_settings)
+        return Response(serializer.data)
+    
+    def get(self, request):
+        user = request.user
+        user_settings, created = UserSettings.objects.get_or_create(user=user, defaults={'config': {
+            "mode_id": "llama3-70b-8192",
+            "temperature": 0.3,
+        }})
+        serializer = self.serializer_class(user_settings)
+        return Response(serializer.data)

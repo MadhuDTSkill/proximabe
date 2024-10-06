@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, UserSettings
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -23,5 +23,13 @@ class UserLoginSerializer(serializers.Serializer):
     email =  serializers.EmailField()
     password = serializers.CharField(write_only=True)
 
+
 class UserLogoutSerializer(serializers.ModelSerializer):
     access = serializers.CharField(write_only=True)
+    
+class UserConfigSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = UserSettings
+        fields = '__all__'

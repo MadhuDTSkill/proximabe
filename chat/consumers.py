@@ -35,6 +35,7 @@ class ChatConsumer(BaseChatAsyncJsonWebsocketConsumer):
         return web_url_tool(query)
     
     async def send_source_status(self, source:str):
+        print("Source:", source)
         await self.send_json({
             'type': 'source_status',
             'source': source
@@ -69,7 +70,8 @@ class ChatConsumer(BaseChatAsyncJsonWebsocketConsumer):
             config = self.user.settings.config
         except User.settings.RelatedObjectDoesNotExist:
             config = {}
- 
+        if config is None:
+            config = {}
         return {
             "model" : config.get('model_id') or 'llama3-70b-8192',
             "temperature" : config.get("temperature") or 0.3
