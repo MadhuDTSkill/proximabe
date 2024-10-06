@@ -1,4 +1,4 @@
-# Proxima - Version 1.0.3
+# Proxima - Version 1.0.4
 
 **Proxima** is your go-to platform for chatting with open-source Large Language Models (LLMs) like **Gemma**, **Meta's LLaMA**, **Mistral**, and more. It offers a seamless experience to switch between different AI models, engage in insightful conversations, and manage your profile—all within a single application. Harness the power of cutting-edge AI technology for personalized chats and file-based interactions.
 
@@ -29,6 +29,12 @@ Proxima allows users to communicate with various LLMs and leverage the power of 
 - **Enhanced Code Formatting**:  
   Improved UI implementation includes specific formatting for programming code, ensuring that code snippets are displayed clearly and are easy to read.
 
+- **Message Menu Options**:  
+  Each message comes with a convenient menu that allows users to copy messages or save them as markdown files for later reference, enhancing the usability and flexibility of chat interactions.
+
+- **Improved Sidebar UI**:  
+  The sidebar has undergone enhancements for better navigation and organization, making it easier for users to manage their conversations and access different features.
+
 - **Profile Management**:  
   Manage your user profile within the app, allowing you to keep track of your chat history, preferred AI models, and settings.
 
@@ -45,7 +51,9 @@ Proxima allows users to communicate with various LLMs and leverage the power of 
 
 ## Version Information
 
-- **Current Version**: 1.0.3
+- **Current Version**: 1.0.4
+  - Added message menu for each message to copy and save messages as markdown files.
+  - Enhanced sidebar UI for improved navigation and usability.
   - Enhanced real-time data handling, including fetching content from URLs and Wikipedia searches.
   - Improved UI for formatting programming code and other structured content.
   - Continued support for multiple LLM models and file-based conversations.

@@ -14,20 +14,11 @@ system_prompt = """
 
     You will respond to user queries by following these simple guidelines:
 
-    - Use clear and concise language.
-    - Structure your responses naturally.
-    - Add a relevant prefix and suffix based on the type of response.
-
     - **Document-Based Contextual Assistance**:  
       - If a user's query relates to a **specific document context** provided (such as text or PDF documents), you should use that document context to generate more accurate and relevant responses.
       - Provided document context (if any): **{context}** (retrieved from documents such as text, PDF, etc.)
       - **Context Source**: **{context_source}** (Possible sources include: "Wikipedia search result", "DuckDuckGo search context", "Scraped web page content from specific url", "User-uploaded document (PDF/Text)")
       - If the query does not relate to the provided document context, proceed with your general knowledge to assist the user.
-
-    Prefixes and suffixes should be tailored to the response:
-    - For **summaries**, use the prefix: (Ex: "Here is your summary:" and add the suffix: "Would you like more details or a specific section breakdown?")
-    - For **code examples**, use the prefix: (Ex: "Here's the code you requested:" and add the suffix: "Do you need further assistance or explanation for the code?")
-    - For **explanations**, use the prefix: (Ex: "Let me explain:" and the suffix: "Does this clarify your query, or should I elaborate further?)"
 
     Only use prefixes and suffixes when they naturally fit the response context.
 """

@@ -27,7 +27,7 @@ def web_url_tool(query):
     return content
 
 
-if __name__ == "__main____":
+if __name__ == "__main__":
     print(wikipedia_tool("What is the capital of France?"))
     print(duckduckgo_search_tool("What is today date?"))
     print(web_url_tool("How i can visit this urls https://python.langchain.com/docs/integrations/,  https://python.langchain.com/docs/integrations/document_loaders/url/"))

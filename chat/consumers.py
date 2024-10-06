@@ -56,9 +56,12 @@ class ChatConsumer(BaseChatAsyncJsonWebsocketConsumer):
                 await self.send_source_status('Searching Web URL(S) ...')
                 return await self.get_web_url_context(query), 'Web URL Context'
             else:
-                return await self.get_attached_context(query)
+                await self.send_source_status('Loading ...')
+                return await self.get_attached_context(query), 'Attached Context'
         except Exception as e:
-            return await self.get_attached_context(query)
+            print("Error:", e)
+            await self.send_source_status('Loading ...')
+            return await self.get_attached_context(query), 'Attached Context'
 
     @database_sync_to_async
     def get_user_settings_config(self):
