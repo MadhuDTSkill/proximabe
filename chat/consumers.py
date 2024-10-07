@@ -4,11 +4,12 @@ from base_app.decorators import consumer_method_exception_handler
 from .ai_chats import LLMResponse, SourceDecider
 from .ai_memory import Memory
 from channels.db import database_sync_to_async
-from users.models import User
+from users.models import User, UserSettings
+from .models import Chat
 from langchain_core.chat_history import BaseChatMessageHistory
 from .ai_vector_dbs import AIVectorDB
 from .ai_tools import wikipedia_tool, duckduckgo_search_tool, web_url_tool
-
+import asyncio, time
 
 class ChatConsumer(BaseChatAsyncJsonWebsocketConsumer):
     groups = []
@@ -21,6 +22,7 @@ class ChatConsumer(BaseChatAsyncJsonWebsocketConsumer):
             
     @database_sync_to_async
     def get_attached_context(self, query) -> dict:
+        self.chat = Chat.objects.get(id=self.chat.id)
         if self.chat.attach is not None:
             return AIVectorDB().get_context(self.chat.attach.vector_db_path, query)
         return None
@@ -35,11 +37,12 @@ class ChatConsumer(BaseChatAsyncJsonWebsocketConsumer):
         return web_url_tool(query)
     
     async def send_source_status(self, source:str):
-        print("Source:", source)
         await self.send_json({
             'type': 'source_status',
             'source': source
         })
+        await asyncio.sleep(0.1)
+        
     
     async def get_context(self, query) -> str:
         try:
@@ -67,7 +70,8 @@ class ChatConsumer(BaseChatAsyncJsonWebsocketConsumer):
     @database_sync_to_async
     def get_user_settings_config(self):
         try:
-            config = self.user.settings.config
+            user_settings = UserSettings.objects.get(user=self.user)
+            config = user_settings.config
         except User.settings.RelatedObjectDoesNotExist:
             config = {}
         if config is None:
