@@ -69,7 +69,7 @@ class LLMResponse:
     def get_session_history(self, session_id:str = 'default') -> BaseChatMessageHistory:
         return Memory.get_memory(session_id, self.user_id, 2000, self.llm, True, False, 'human')
         
-    def get_response(self, prompt: str, source : str, context:str|None = None):
+    def get_stream_response(self, prompt: str, source : str, context:str|None = None):
         input = {
             'input' : prompt, 
             "current_model": self.config.get('model'),
@@ -79,6 +79,23 @@ class LLMResponse:
         memory = self.get_session_history(str(self.chat_id))
         memory.add_user_message(prompt)
         return self.conversational_rag_chain.stream(
+            input,
+            config={
+            "configurable": {
+                "session_id": self.chat_id,
+            }
+        })
+    
+    def get_response(self, prompt: str, source : str, context:str|None = None):
+        input = {
+            'input' : prompt, 
+            "current_model": self.config.get('model'),
+            "context": context or 'No Context Provided',
+            "context_source" : source
+            }
+        memory = self.get_session_history(str(self.chat_id))
+        memory.add_user_message(prompt)
+        return self.conversational_rag_chain.invoke(
             input,
             config={
             "configurable": {

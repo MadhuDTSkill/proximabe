@@ -1,69 +1,63 @@
-# Proxima - Version 1.0.4
+# Proxima - Version 2.0 (Minor Update)
 
-**Proxima** is your go-to platform for chatting with open-source Large Language Models (LLMs) like **Gemma**, **Meta's LLaMA**, **Mistral**, and more. It offers a seamless experience to switch between different AI models, engage in insightful conversations, and manage your profile—all within a single application. Harness the power of cutting-edge AI technology for personalized chats and file-based interactions.
+**Proxima** continues to be your premier platform for engaging with open-source Large Language Models (LLMs) like **Gemma**, **Meta's LLaMA**, **Mistral**, and others. With **Version 2.0**, we are excited to introduce some new features and prepare for future enhancements, even though some of the exciting updates are still in development. Proxima offers a smooth experience for switching between AI models, file-based conversations, and profile management, all while continuing to improve on its original design.
 
 ## Overview
 
-Proxima allows users to communicate with various LLMs and leverage the power of open-source AI models for natural language understanding. It combines intuitive features to offer a user-friendly interface that enhances the AI chatting experience.
+Proxima empowers users to chat with open-source LLMs and harness the power of AI for natural language conversations and document-based interactions. The platform offers intuitive navigation and seamless integration of new features, with an eye toward further expansion.
 
 ### Key Features:
 
 - **Chat with Local and Open-Source LLMs**:  
-  Engage in conversations with well-known models like **Gemma**, **Meta's LLaMA**, **Jammu**, and more. Each model brings unique capabilities to provide diverse interactions and insights.
+  Continue your conversations with models like **Gemma**, **Meta's LLaMA**, **Jammu**, and more. Each model provides unique interactions and insights for a personalized experience.
 
-- **Seamless Switching Between AI Models**:  
-  Users can switch between different LLMs to experience a variety of AI personalities and chat styles, making every conversation unique.
+- **Seamless AI Model Switching**:  
+  Easily switch between different LLMs during your chat to experience varied conversational styles and AI personalities.
 
 - **File-Based Conversations**:  
-  Upload **PDF** or **Text** files and chat with the AI based on the document context. Whether you're summarizing, extracting key points, or discussing a specific part of the file, Proxima allows for smooth and intelligent conversations about your documents.
+  Upload **PDF** or **Text** files and engage in discussions with the AI based on your document's content. Whether summarizing, extracting key points, or focusing on specific details, Proxima handles file-based conversations seamlessly.
 
 - **Real-Time Data Handling**:  
-  Proxima can search for real-time data by fetching content from provided URLs. It can also perform searches on **Wikipedia** to provide accurate answers based on up-to-date information.
+  Proxima allows for real-time data search, enabling AI to fetch content from URLs and perform **Wikipedia** searches for up-to-date information.
 
 - **Conversation Playtime**:  
-  Each conversation topic has its own timeline. Easily navigate through discussions, review past interactions, and continue from where you left off. Proxima helps you stay organized by categorizing and timestamping your chat topics.
+  Stay organized with topic-based conversation timelines. You can easily navigate through discussions, review past chats, and continue from where you left off.
 
 - **Beautiful Response Formatting**:  
-  Experience clean and well-structured responses from the AI, displayed in a visually appealing manner. The app formats the replies to make them easy to follow and understand.
+  Enjoy clean, structured responses from AI, making the conversations visually appealing and easy to follow.
 
 - **Enhanced Code Formatting**:  
-  Improved UI implementation includes specific formatting for programming code, ensuring that code snippets are displayed clearly and are easy to read.
+  With improved UI, code snippets are presented clearly, offering proper formatting for programming-related discussions.
 
 - **Message Menu Options**:  
-  Each message comes with a convenient menu that allows users to copy messages or save them as markdown files for later reference, enhancing the usability and flexibility of chat interactions.
+  Every message comes with a menu allowing users to copy or save messages as markdown files for easy reference.
 
 - **Improved Sidebar UI**:  
-  The sidebar has undergone enhancements for better navigation and organization, making it easier for users to manage their conversations and access different features.
+  Enhanced sidebar navigation allows for better access to conversations, AI models, and features.
 
 - **Profile Management**:  
-  Manage your user profile within the app, allowing you to keep track of your chat history, preferred AI models, and settings.
+  Manage your user profile, track chat history, preferred models, and customize your settings.
 
-### Use Case Highlights:
+### New Features (Still in Development):
 
-- **AI Model Exploration**:  
-  Explore and test various LLMs, each with distinct abilities, all from a single interface.
+- **Dark Theme**:  
+  A much-anticipated dark mode is on the way, allowing for a more comfortable user experience in low-light environments.
 
-- **Document-Based Interactions**:  
-  Whether you're working on research, summarizing a document, or analyzing text, Proxima allows you to chat with the AI models based on specific documents.
+- **Our Life Page**:  
+  Explore the upcoming **Our Life** feature—an exciting new page to engage with AI in creative and personalized ways.
 
-- **Conversational Organization**:  
-  Keep track of your discussions through categorized conversations, ensuring you can refer back to previous discussions effortlessly.
+- **Additional Pages**:  
+  Several new pages are in the works to further expand Proxima's functionality, providing users with more ways to interact with the AI models and explore their potential.
 
 ## Version Information
 
-- **Current Version**: 1.0.4
-  - Added message menu for each message to copy and save messages as markdown files.
-  - Enhanced sidebar UI for improved navigation and usability.
-  - Enhanced real-time data handling, including fetching content from URLs and Wikipedia searches.
-  - Improved UI for formatting programming code and other structured content.
-  - Continued support for multiple LLM models and file-based conversations.
+- **Current Version**: 2.0 (Minor Update)
+  - Added new dark theme and other pages (still in development).
+  - Enhanced sidebar UI for better navigation and usability.
+  - Continued support for multiple LLMs, file-based conversations, and real-time data handling.
   - Profile management and conversation timeline features.
-  - Clean and organized response formatting.
+  - Beautifully formatted responses and code presentation.
 
 ## Conclusion
 
-Proxima is a dynamic platform that brings together the flexibility of open-source LLMs and the convenience of file-based conversations. It’s designed to make AI interaction intuitive, engaging, and organized for users who want the best of both chat and document analysis features. Stay tuned for more updates and features!
-
----
-
-*This README provides a high-level overview of the project and its core functionalities.*
+Proxima remains a powerful platform for users looking to combine open-source AI with document-based interactions. With new features in development, Proxima aims to deliver an even more personalized and engaging experience in future versions. Stay tuned for more updates!

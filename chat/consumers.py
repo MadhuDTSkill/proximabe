@@ -97,8 +97,21 @@ class ChatConsumer(BaseChatAsyncJsonWebsocketConsumer):
     
     async def get_llm_response(self):
         context, source = await self.get_context(self.prompt)
-        generator : Generator = self.llm_response.get_response(self.prompt, context, source)
-        await self.stream_response(generator)
+        await asyncio.sleep(0.5)
+        await self.send_source_status('Thinking ...')
+        response : str = self.llm_response.get_response(self.prompt, context, source)
+        await self.send_response(response)
+    
+    async def send_response(self, response):
+        await self.send_json({
+            'id' : await BaseChatAsyncJsonWebsocketConsumer.generate_random_id(),
+            'type': 'response',
+            'prompt' : self.prompt,
+            'response': response,
+            'user_id' : str(self.user.id),
+            'user_name' : str(self.user.name),
+        })
+        await self.add_response_to_session_history(response)
     
     async def stream_response(self, generator:Generator):
         await self.send_json({
