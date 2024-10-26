@@ -1,4 +1,7 @@
-from typing import Final
+import operator
+from langchain_core.messages import BaseMessage
+from typing_extensions import TypedDict, Annotated
+from typing import Sequence, Any, Final
 
 MODELS : Final = {
     "Google": [
@@ -54,3 +57,8 @@ MODELS : Final = {
 
 DEFAULT_MODEL_ID = 'llama3-70b-8192'
 DEFAULT_TEMPARATURE = 0.3
+
+class WorkFlowState(TypedDict):
+    messages: Annotated[Sequence[BaseMessage], operator.add]
+    consumer: Any
+    
