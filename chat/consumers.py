@@ -1,7 +1,6 @@
 from typing import Generator
 from base_app.consumers import BaseChatAsyncJsonWebsocketConsumer
 from base_app.decorators import consumer_method_exception_handler
-from .ai_chats import LLMResponse, SourceDecider
 from .ai_graphs import ProximaAgentStateGraph
 from .ai_memory import Memory
 from channels.db import database_sync_to_async

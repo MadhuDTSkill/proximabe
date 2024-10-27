@@ -19,6 +19,7 @@ class Chat(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='chats')
     first_prompt = models.TextField()
     name = models.CharField(max_length=100, null=True, blank=True)
+    gpt = models.CharField(default = 'main', max_length=100, null=True, blank=True)
     attach = models.OneToOneField(UploadedFile, on_delete=models.CASCADE, null=True, blank=True, default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
@@ -52,4 +53,25 @@ class Message(models.Model):
         ordering = ['created_at']
         
         
+class CustomGPT(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='custom_gpts')
+    slug = models.CharField(null=True, blank=True, max_length=100, unique=True)
+    name = models.CharField(max_length=100)
+    short_description = models.TextField()
+    long_description = models.TextField()
+    conversation_starters = models.JSONField(default=list)
+    system_prompt = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self) -> str:
+        return self.name
+    
+    def save(self, *args, **kwargs) -> None:
+        if self.slug is None or self.slug == '':
+            some_uuid = str(self.id)[:8]
+            self.slug = "g-" + some_uuid + "-" + self.name.replace(' ', '-').lower()
+        super().save(*args, **kwargs)
+        
+# for i in CustomGPT.objects.all():
+#     i.save()        

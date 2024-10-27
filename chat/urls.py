@@ -1,12 +1,13 @@
 from django.urls import path, include
-from .views import ChatViewSet, MessageListCreateView, FileUploadView
+from .views import ChatViewSet, MessageListCreateView, FileUploadView, CustomGPTViewSet
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
+router.register('my-gpts', CustomGPTViewSet)
 router.register('', ChatViewSet)
 
 urlpatterns = [
-    path('', include(router.urls), name = 'chat-crud')    ,
+    path('', include(router.urls)),
     path('<chat_id>/message/create-list/', MessageListCreateView.as_view(), name='message-create'),
     path('<chat_id>/upload-file/', FileUploadView.as_view(), name='upload-file'),
 ]

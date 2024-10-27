@@ -5,8 +5,8 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListCreateAPIView, CreateAPIView
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import Chat, Message, UploadedFile
-from .serializers import ChatSerializer, MessageSerializer, UploadedFileSerializer
+from .models import Chat, Message, UploadedFile, CustomGPT
+from .serializers import ChatSerializer, MessageSerializer, UploadedFileSerializer, CustomGPTSerializer
 from .ai_vector_dbs import AIVectorDB
 
 class ChatViewSet(ModelViewSet):
@@ -59,6 +59,15 @@ class ChatViewSet(ModelViewSet):
     
         return Response(response_data)
 
+
+class CustomGPTViewSet(ModelViewSet):
+    queryset = CustomGPT.objects.all()
+    serializer_class = CustomGPTSerializer
+    lookup_field = 'slug'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(user = self.request.user)
+    
         
 class MessageListCreateView(ListCreateAPIView):
     
