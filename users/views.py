@@ -64,7 +64,7 @@ class UserDetailsView(generics.RetrieveAPIView):
     serializer_class = UserRegisterSerializer
     
     def get(self, request):
-        user = self.queryset.get(id=request.user)
+        user = request.user
         user_data = self.serializer_class(user).data
         return Response(user_data)
 
